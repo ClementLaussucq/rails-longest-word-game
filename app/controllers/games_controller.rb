@@ -16,12 +16,19 @@ class GamesController < ApplicationController
     @letters = Array.new(10) { ('A'..'Z').to_a.sample }
   end
 
+
   def score
     input = params[:score]
     initial_word = params[:letters]
+    current_word_size = 0
     if included?(input.upcase, initial_word)
       if english_word?(input)
-      @score = "well Done"
+        if session[:current_word_size].nil?
+          session[:current_word_size] = input.size
+        else
+          session[:current_word_size] += input.size
+        end
+      @score = "well Done you have got #{session[:current_word_size]} points"
       else
       @score = "sorry but #{input}does not seem to be a valid english_word..."
       end
@@ -30,3 +37,4 @@ class GamesController < ApplicationController
     end
   end
 end
+
